@@ -13,147 +13,80 @@ const MONSTERS = [
   { id: 5, name: 'Original Green',   value: 16, colorClass: 'bg-green-500 ring-green-300' },
 ];
 
-// PREVIEW – konfiguracja w procentach (od wysokości etykiety)
-const LABEL_SETTINGS_PREVIEW: Record<string, any> = {
-  '1_25': {
-    nameTopPercent: 14,
-    nameBottomPercent: undefined,
-    nameLeft: '38.5%',
-    nameRight: '0',
-    nameJustify: 'center',
-    nameWidth: '65%',
-    nameTransform: 'skewX(-3deg) scale(1.05)',
+// Natywna rozdzielczość pod wydruk / apkę Polaroid (pion)
+const NATIVE_WIDTH_PX  = 800;  // szerokość obrazu
+const NATIVE_HEIGHT_PX = 600;  // wysokość obrazu
+
+const getLabelSizePx = () => ({
+  width: NATIVE_WIDTH_PX,
+  height: NATIVE_HEIGHT_PX,
+});
+
+// PREVIEW – ustawienia podglądu (ekran)
+const POLAROID_PREVIEW_SETTINGS: Record<number, any> = {
+  1: {
+    nameTopPx:      74.5,
+    nameLeft:       'auto',
+    nameRight:      '13.5%',
+    nameWidth:      '30%',
+    nameJustify:    'flex-end',
+    nameTransform:  'scale(1.05)',
+    nameFontSize:   '34px',
     nameFontWeight: '400',
-    nameFontSize: '30px',
-    nameCurve: 'M 100,210 Q 700,140 1300,210',
-    baseTopPercent: undefined,
-    baseBottomPercent: 55,
-    baseAlign: 'center',
-    baseWidth: '50%',
-    baseLeft: '-26%',
+    nameCurve:      'M 50,150 Q 400,100 750,150',
+    baseTopPx:      100,
+    baseOffsetPx:   -90,
+    baseWidth:      '50%',
+    baseAlign:      'center',
   },
-  '1_50': {
-    nameTopPercent: 12.5,
-    nameBottomPercent: undefined,
-    nameLeft: '38.5%',
-    nameRight: '0',
-    nameJustify: 'center',
-    nameWidth: '65%',
-    nameTransform: 'skewX(-3deg) scale(1.05)',
+  2: {
+    nameTopPx:      445,
+    nameLeft:       '64.5%',
+    nameRight:      'auto',
+    nameWidth:      '40%',
+    nameJustify:    'flex-start',
+    nameTransform:  'scale(1.0)',
+    nameFontSize:   '38px',
     nameFontWeight: '400',
-    nameFontSize: '38px',
-    nameCurve: 'M 100,210 Q 700,140 1300,210',
-    baseTopPercent: undefined,
-    baseBottomPercent: 55,
-    baseAlign: 'center',
-    baseWidth: '50%',
-    baseLeft: '-26%',
-  },
-  '2_25': {
-    nameTopPercent: undefined,
-    nameBottomPercent: 10,
-    nameLeft: 'auto',
-    nameRight: '-12.5%',
-    nameJustify: 'flex-end',
-    nameWidth: '45%',
-    nameTransform: 'scale(1)',
-    nameFontWeight: '400',
-    nameFontSize: '64px',
-    nameCurve: 'M 130,200 Q 500,140 900,200',
-    baseTopPercent: 2,
-    baseBottomPercent: undefined,
-    baseAlign: 'center',
-    baseWidth: '60%',
-    baseLeft: '-10%',
-  },
-  '2_50': {
-    nameTopPercent: undefined,
-    nameBottomPercent: 5,
-    nameLeft: 'auto',
-    nameRight: '-12.5%',
-    nameJustify: 'flex-end',
-    nameWidth: '45%',
-    nameTransform: 'scale(1)',
-    nameFontWeight: '400',
-    nameFontSize: '80px',
-    nameCurve: 'M 130,200 Q 500,140 900,200',
-    baseTopPercent: 6,
-    baseBottomPercent: undefined,
-    baseAlign: 'center',
-    baseWidth: '60%',
-    baseLeft: '-10%',
+    nameCurve:      'M 50,140 Q 400,130 750,140',
+    baseTopPx:      20,
+    baseOffsetPx:   -95,
+    baseWidth:      '50%',
+    baseAlign:      'center',
   },
 };
 
-// PRINT – osobne presety bg×taśma
-const LABEL_SETTINGS_PRINT: Record<string, any> = {
-  '1_25': {
-    nameTopPercent: 14,
-    nameBottomPercent: undefined,
-    nameLeft: '42%',
-    nameRight: '0',
-    nameJustify: 'center',
-    nameWidth: '62%',
-    nameTransform: 'skewX(-3deg) scale(1.05)',
+// EXPORT – ustawienia tylko pod PNG (możesz korygować niezależnie)
+const POLAROID_EXPORT_SETTINGS: Record<number, any> = {
+  1: {
+    nameTopPx:      78,
+    nameLeft:       'auto',
+    nameRight:      '13.75%',
+    nameWidth:      '30%',
+    nameJustify:    'flex-end',
+    nameTransform:  'scale(1.05)',
+    nameFontSize:   '34px',
     nameFontWeight: '400',
-    nameFontSize: '30px',
-    nameCurve: 'M 100,210 Q 700,140 1300,210',
-    baseTopPercent: undefined,
-    baseBottomPercent: 55,
-    baseAlign: 'center',
-    baseWidth: '50%',
-    baseLeft: '-26%',
+    nameCurve:      'M 50,150 Q 400,100 750,150',
+    baseTopPx:      110,
+    baseOffsetPx:   -90,
+    baseWidth:      '50%',
+    baseAlign:      'center',
   },
-  '1_50': {
-    nameTopPercent: 13,
-    nameBottomPercent: undefined,
-    nameLeft: '42%',
-    nameRight: '0',
-    nameJustify: 'center',
-    nameWidth: '62%',
-    nameTransform: 'skewX(-3deg) scale(1.05)',
+  2: {
+    nameTopPx:      448,
+    nameLeft:       '64.5%',
+    nameRight:      'auto',
+    nameWidth:      '40%',
+    nameJustify:    'flex-start',
+    nameTransform:  'scale(1.0)',
+    nameFontSize:   '38px',
     nameFontWeight: '400',
-    nameFontSize: '38px',
-    nameCurve: 'M 100,210 Q 700,140 1300,210',
-    baseTopPercent: undefined,
-    baseBottomPercent: 55,
-    baseAlign: 'center',
-    baseWidth: '50%',
-    baseLeft: '-26%',
-  },
-  '2_25': {
-    nameTopPercent: undefined,
-    nameBottomPercent: 10,
-    nameLeft: 'auto',
-    nameRight: '-12.5%',
-    nameJustify: 'flex-end',
-    nameWidth: '45%',
-    nameTransform: 'scale(1)',
-    nameFontWeight: '400',
-    nameFontSize: '64px',
-    nameCurve: 'M 130,200 Q 500,140 900,200',
-    baseTopPercent: 2,
-    baseBottomPercent: undefined,
-    baseAlign: 'center',
-    baseWidth: '60%',
-    baseLeft: '-10%',
-  },
-  '2_50': {
-    nameTopPercent: undefined,
-    nameBottomPercent: 5,
-    nameLeft: 'auto',
-    nameRight: '-12.5%',
-    nameJustify: 'flex-end',
-    nameWidth: '45%',
-    nameTransform: 'scale(1)',
-    nameFontWeight: '400',
-    nameFontSize: '80px',
-    nameCurve: 'M 130,200 Q 500,140 900,200',
-    baseTopPercent: 5,
-    baseBottomPercent: undefined,
-    baseAlign: 'center',
-    baseWidth: '60%',
-    baseLeft: '-10%',
+    nameCurve:      'M 50,140 Q 400,130 750,140',
+    baseTopPx:      20,
+    baseOffsetPx:   -95,
+    baseWidth:      '50%',
+    baseAlign:      'center',
   },
 };
 
@@ -163,35 +96,15 @@ const ScreenContainer = ({ children }: { children: React.ReactNode }) => (
   </div>
 );
 
-const LENGTH_PRESETS_25 = [30, 36, 45, 60];
-const LENGTH_PRESETS_50 = [40, 50, 60, 80, 100];
-
-const DPI = 300;
-const MM_TO_PX = (mm: number) => Math.round((mm * DPI) / 25.4);
-
-const getLabelSizePx = (tapeWidthMM: 25 | 50, labelLengthMM: number) => ({
-  width: MM_TO_PX(tapeWidthMM),
-  height: MM_TO_PX(labelLengthMM),
-});
-
 export default function MonsterKioskApp() {
   const [step, setStep] = useState<number>(0);
   const [selectedMonsters, setSelectedMonsters] = useState<number[]>([]);
   const [customMixName, setCustomMixName] = useState<string>('');
   const [customColor, setCustomColor] = useState<string>('#EEEEEE');
-  const [bgNumber, setBgNumber] = useState<number>(1);
-
-  const [tapeWidth, setTapeWidth] = useState<25 | 50>(25);
-  const [labelLengthMM, setLabelLengthMM] = useState<number>(36);
-
-  // NOWE: flaga obrotu
-  const [rotate, setRotate] = useState<boolean>(false);
+  const [bgNumber, setBgNumber] = useState<number>(1); // 1 / 2
 
   const previewRef = useRef<HTMLDivElement | null>(null);
   const exportRef = useRef<HTMLDivElement | null>(null);
-
-  const currentLengthPresets =
-    tapeWidth === 25 ? LENGTH_PRESETS_25 : LENGTH_PRESETS_50;
 
   const toggleMonster = (id: number) => {
     setSelectedMonsters((prev) =>
@@ -205,9 +118,6 @@ export default function MonsterKioskApp() {
     setCustomMixName('');
     setCustomColor('#EEEEEE');
     setBgNumber(1);
-    setTapeWidth(25);
-    setLabelLengthMM(36);
-    setRotate(false);
   };
 
   const getBaseMonstersList = (): string => {
@@ -216,174 +126,58 @@ export default function MonsterKioskApp() {
       .join(' + ');
   };
 
-  const { width: labelWidthPx, height: labelHeightPx } = getLabelSizePx(
-    tapeWidth,
-    labelLengthMM,
-  );
+  const { width: labelWidthPx, height: labelHeightPx } = getLabelSizePx();
 
-  const key = `${bgNumber}_${tapeWidth}`;
-  const previewPos =
-    LABEL_SETTINGS_PREVIEW[key] || LABEL_SETTINGS_PREVIEW['1_25'];
-  const printPos =
-    LABEL_SETTINGS_PRINT[key] || LABEL_SETTINGS_PRINT['1_25'];
-
-  // % → px PREVIEW
-  const previewNameTopPx =
-    previewPos.nameTopPercent !== undefined
-      ? (previewPos.nameTopPercent / 100) * labelHeightPx
-      : undefined;
-
-  const previewNameBottomPx =
-    previewPos.nameBottomPercent !== undefined
-      ? (previewPos.nameBottomPercent / 100) * labelHeightPx
-      : undefined;
-
-  const previewBaseTopPx =
-    previewPos.baseTopPercent !== undefined
-      ? (previewPos.baseTopPercent / 100) * labelHeightPx
-      : undefined;
-
-  const previewBaseBottomPx =
-    previewPos.baseBottomPercent !== undefined
-      ? (previewPos.baseBottomPercent / 100) * labelHeightPx
-      : undefined;
-
-  // % → px PRINT
-  const printNameTopPx =
-    printPos.nameTopPercent !== undefined
-      ? (printPos.nameTopPercent / 100) * labelHeightPx
-      : undefined;
-
-  const printNameBottomPx =
-    printPos.nameBottomPercent !== undefined
-      ? (printPos.nameBottomPercent / 100) * labelHeightPx
-      : undefined;
-
-  const printBaseTopPx =
-    printPos.baseTopPercent !== undefined
-      ? (printPos.baseTopPercent / 100) * labelHeightPx
-      : undefined;
-
-  const printBaseBottomPx =
-    printPos.baseBottomPercent !== undefined
-      ? (printPos.baseBottomPercent / 100) * labelHeightPx
-      : undefined;
-
-  // kompensacja bg2
-  const bgIs2 = bgNumber === 2;
-  const extraOffsetForBg2 = bgIs2 && labelLengthMM > 36
-    ? (labelLengthMM - 36) * 0.15 * MM_TO_PX(1)
-    : 0;
-
-  const previewNameTopPxAdjusted =
-    previewNameTopPx !== undefined
-      ? previewNameTopPx - extraOffsetForBg2
-      : undefined;
-
-  const previewNameBottomPxAdjusted =
-    previewNameBottomPx !== undefined
-      ? previewNameBottomPx + extraOffsetForBg2
-      : undefined;
-
-  const previewBaseTopPxAdjusted =
-    previewBaseTopPx !== undefined
-      ? previewBaseTopPx - extraOffsetForBg2 * 0.5
-      : undefined;
-
-  const previewBaseBottomPxAdjusted =
-    previewBaseBottomPx !== undefined
-      ? previewBaseBottomPx + extraOffsetForBg2 * 0.5
-      : undefined;
-
-  const printNameTopPxAdjusted =
-    printNameTopPx !== undefined
-      ? printNameTopPx - extraOffsetForBg2
-      : undefined;
-
-  const printNameBottomPxAdjusted =
-    printNameBottomPx !== undefined
-      ? printNameBottomPx + extraOffsetForBg2
-      : undefined;
-
-  const printBaseTopPxAdjusted =
-    printBaseTopPx !== undefined
-      ? printBaseTopPx - extraOffsetForBg2 * 0.5
-      : undefined;
-
-  const printBaseBottomPxAdjusted =
-    printBaseBottomPx !== undefined
-      ? printBaseBottomPx + extraOffsetForBg2 * 0.5
-      : undefined;
+  const previewPos = POLAROID_PREVIEW_SETTINGS[bgNumber];
+  const exportPos  = POLAROID_EXPORT_SETTINGS[bgNumber];
 
   const handleExportImage = async () => {
-  if (!exportRef.current) return;
+    if (!exportRef.current) return;
 
-  const win = window.open('', '_blank');
-  if (!win) {
-    alert('Przeglądarka zablokowała nowe okno. Zezwól na wyskakujące okna.');
-    return;
-  }
-
-  win.document.write(
-    `<html><head><title>Generowanie etykiety...</title></head>
-     <body style="margin:0;padding:0;display:flex;align-items:center;justify-content:center;background:#000;color:#fff;font-family:-apple-system,system-ui,sans-serif;">
-       <div>Generuję obraz etykiety...</div>
-     </body></html>`,
-  );
-  win.document.close();
-
-  try {
-    const canvas = await html2canvas(exportRef.current, {
-      scale: 2,
-      backgroundColor: null,
-      useCORS: true,
-    });
-
-    let finalDataUrl: string;
-
-    if (rotate) {
-      // OBRÓT 90° W PRAWO (clockwise)
-      const rotatedCanvas = document.createElement('canvas');
-      rotatedCanvas.width = canvas.height;
-      rotatedCanvas.height = canvas.width;
-
-      const ctx = rotatedCanvas.getContext('2d');
-      if (!ctx) throw new Error('No 2d context');
-
-      // środek nowego canvasa
-      ctx.translate(rotatedCanvas.width / 2, rotatedCanvas.height / 2);
-      ctx.rotate(Math.PI / 2); // 90deg
-
-      // rysujemy stary canvas przesunięty o połowę szerokości/wysokości
-      ctx.drawImage(canvas, -canvas.width / 2, -canvas.height / 2);
-
-      finalDataUrl = rotatedCanvas.toDataURL('image/png');
-    } else {
-      // normalny pion
-      finalDataUrl = canvas.toDataURL('image/png');
+    const win = window.open('', '_blank');
+    if (!win) {
+      alert('Przeglądarka zablokowała nowe okno. Zezwól na wyskakujące okna.');
+      return;
     }
 
-    win.document.open();
     win.document.write(
-      `<html><head><title>Etykieta</title></head>
-       <body style="margin:0;padding:0;display:flex;align-items:center;justify-content:center;background:#fff;">
-         <img src="${finalDataUrl}" />
+      `<html><head><title>Generowanie etykiety...</title></head>
+       <body style="margin:0;padding:0;display:flex;align-items:center;justify-content:center;background:#000;color:#fff;font-family:-apple-system,system-ui,sans-serif;">
+         <div>Generuję obraz etykiety...</div>
        </body></html>`,
     );
     win.document.close();
-  } catch (e) {
-    console.error('Export error', e);
-    win.document.open();
-    win.document.write(
-      `<html><head><title>Błąd</title></head>
-       <body style="margin:0;padding:20px;font-family:-apple-system,system-ui,sans-serif;">
-         <h1>Nie udało się wygenerować obrazu.</h1>
-         <p>Spróbuj ponownie lub odśwież stronę.</p>
-       </body></html>`,
-    );
-    win.document.close();
-  }
-};
+
+    try {
+      const canvas = await html2canvas(exportRef.current, {
+        scale: 2,
+        backgroundColor: null,
+        useCORS: true,
+      });
+
+      const dataUrl = canvas.toDataURL('image/png');
+
+      win.document.open();
+      win.document.write(
+        `<html><head><title>Etykieta</title></head>
+         <body style="margin:0;padding:0;display:flex;align-items:center;justify-content:center;background:#fff;">
+           <img src="${dataUrl}" />
+         </body></html>`,
+      );
+      win.document.close();
+    } catch (e) {
+      console.error('Export error', e);
+      win.document.open();
+      win.document.write(
+        `<html><head><title>Błąd</title></head>
+         <body style="margin:0;padding:20px;font-family:-apple-system,system-ui,sans-serif;">
+           <h1>Nie udało się wygenerować obrazu.</h1>
+           <p>Spróbuj ponownie lub odśwież stronę.</p>
+         </body></html>`,
+      );
+      win.document.close();
+    }
+  };
 
   if (step === 0)
     return (
@@ -483,6 +277,7 @@ export default function MonsterKioskApp() {
       </ScreenContainer>
     );
 
+  // STEP 3 – PREVIEW + EXPORT
   return (
     <>
       <div className="flex h-screen w-full flex-col items-center justify-start bg-black p-4 font-sans overflow-hidden text-white relative z-50 print:hidden">
@@ -501,43 +296,6 @@ export default function MonsterKioskApp() {
             Popraw
           </button>
 
-          <button
-            onClick={() => {
-              setTapeWidth((prev) => {
-                const next = prev === 25 ? 50 : 25;
-                if (next === 25) setLabelLengthMM(36);
-                else setLabelLengthMM(60);
-                return next;
-              });
-            }}
-            className="rounded-full bg-blue-600 px-4 py-3 text-lg font-bold text-white uppercase"
-          >
-            Taśma: {tapeWidth}mm
-          </button>
-
-          <div className="bg-zinc-800 rounded-full px-4 py-2 text-sm flex items-center gap-2">
-            <div className="flex flex-col">
-              <span className="uppercase font-bold">Długość:</span>
-              {tapeWidth === 25 && (
-                <span className="text-[10px] text-zinc-400">
-                  Najlepiej wygląda przy 36mm i 45mm
-                </span>
-              )}
-            </div>
-
-            <select
-              value={labelLengthMM}
-              onChange={(e) => setLabelLengthMM(Number(e.target.value))}
-              className="bg-transparent outline-none font-bold ml-2"
-            >
-              {currentLengthPresets.map((len) => (
-                <option key={len} value={len}>
-                  {len} mm
-                </option>
-              ))}
-            </select>
-          </div>
-
           <div
             className="relative rounded-full border-2 px-4 py-3 text-lg font-bold text-white uppercase overflow-hidden"
             style={{ borderColor: customColor }}
@@ -551,16 +309,6 @@ export default function MonsterKioskApp() {
             />
           </div>
 
-          {/* NOWY przycisk: obrót */}
-          <button
-            onClick={() => setRotate((r) => !r)}
-            className={`rounded-full px-4 py-3 text-lg font-bold uppercase ${
-              rotate ? 'bg-yellow-500 text-black' : 'bg-zinc-700 text-white'
-            }`}
-          >
-            Obrót: {rotate ? 'Włączony (poziom)' : 'Wyłączony (pion)'}
-          </button>
-
           <button
             onClick={handleExportImage}
             className="rounded-full bg-green-600 px-6 py-3 text-xl font-black text-white uppercase"
@@ -569,17 +317,16 @@ export default function MonsterKioskApp() {
           </button>
 
           <div className="text-xs text-zinc-400 ml-4">
-            {tapeWidth}mm × {labelLengthMM}mm → {labelWidthPx}×{labelHeightPx} px
+            {NATIVE_WIDTH_PX}×{NATIVE_HEIGHT_PX} px
           </div>
         </div>
 
-        {/* PREVIEW – ekran */}
+        {/* PREVIEW */}
         <div
           className="relative shadow-2xl bg-white overflow-hidden mx-auto"
           style={{
-            // przy obrocie zamieniamy width/height żeby lepiej wyglądał podgląd
-            width: rotate ? `${labelHeightPx}px` : `${labelWidthPx}px`,
-            height: rotate ? `${labelWidthPx}px` : `${labelHeightPx}px`,
+            width: `${labelWidthPx}px`,
+            height: `${labelHeightPx}px`,
           }}
         >
           <div
@@ -588,9 +335,6 @@ export default function MonsterKioskApp() {
               position: 'relative',
               width: '100%',
               height: '100%',
-              // obracamy całą etykietę w podglądzie
-              transform: rotate ? 'rotate(90deg)' : 'none',
-              transformOrigin: 'center center',
             }}
           >
             <img
@@ -609,17 +353,10 @@ export default function MonsterKioskApp() {
             <div
               style={{
                 position: 'absolute',
-                top:
-                  previewNameTopPxAdjusted !== undefined
-                    ? `${previewNameTopPxAdjusted}px`
-                    : undefined,
-                bottom:
-                  previewNameBottomPxAdjusted !== undefined
-                    ? `${previewNameBottomPxAdjusted}px`
-                    : undefined,
-                left: previewPos.nameLeft,
-                right: previewPos.nameRight,
-                width: previewPos.nameWidth,
+                top:    `${previewPos.nameTopPx}px`,
+                left:   previewPos.nameLeft,
+                right:  previewPos.nameRight,
+                width:  previewPos.nameWidth,
                 display: 'flex',
                 justifyContent: previewPos.nameJustify,
                 pointerEvents: 'none',
@@ -627,7 +364,7 @@ export default function MonsterKioskApp() {
               }}
             >
               <svg
-                viewBox="0 0 1400 400"
+                viewBox="0 0 800 300"
                 style={{
                   width: '100%',
                   height: 'auto',
@@ -667,18 +404,11 @@ export default function MonsterKioskApp() {
             <div
               style={{
                 position: 'absolute',
-                top:
-                  previewBaseTopPxAdjusted !== undefined
-                    ? `${previewBaseTopPxAdjusted}px`
-                    : undefined,
-                bottom:
-                  previewBaseBottomPxAdjusted !== undefined
-                    ? `${previewBaseBottomPxAdjusted}px`
-                    : undefined,
-                left: previewPos.baseLeft || '0',
-                right: '0',
-                textAlign: previewPos.baseAlign,
-                width: previewPos.baseWidth || 'auto',
+                top: `${previewPos.baseTopPx}px`,
+                left: '50%',
+                transform: `translateX(-50%) translateX(${previewPos.baseOffsetPx || 0}px)`,
+                width: previewPos.baseWidth || '85%',
+                textAlign: previewPos.baseAlign || 'center',
                 margin: '0 auto',
                 padding: '0 8px',
               }}
@@ -691,7 +421,7 @@ export default function MonsterKioskApp() {
                   textShadow: '0 0 3px black',
                   wordBreak: 'break-word',
                   margin: 0,
-                  fontSize: '14px',
+                  fontSize: '16px',
                 }}
               >
                 Baza: {getBaseMonstersList()}
@@ -700,7 +430,7 @@ export default function MonsterKioskApp() {
           </div>
         </div>
 
-        {/* EXPORT – ukryty layout dla html2canvas / druku */}
+        {/* EXPORT */}
         <div
           ref={exportRef}
           style={{
@@ -731,55 +461,48 @@ export default function MonsterKioskApp() {
               alt=""
             />
 
-            {/* NAPIS – PRINT */}
+            {/* NAPIS – EXPORT */}
             <div
               style={{
                 position: 'absolute',
-                top:
-                  printNameTopPxAdjusted !== undefined
-                    ? `${printNameTopPxAdjusted}px`
-                    : undefined,
-                bottom:
-                  printNameBottomPxAdjusted !== undefined
-                    ? `${printNameBottomPxAdjusted}px`
-                    : undefined,
-                left: printPos.nameLeft,
-                right: printPos.nameRight,
-                width: printPos.nameWidth,
+                top:    `${exportPos.nameTopPx}px`,
+                left:   exportPos.nameLeft,
+                right:  exportPos.nameRight,
+                width:  exportPos.nameWidth,
                 display: 'flex',
-                justifyContent: printPos.nameJustify,
+                justifyContent: exportPos.nameJustify,
                 pointerEvents: 'none',
                 zIndex: 20,
               }}
             >
               <svg
-                viewBox="0 0 1400 400"
+                viewBox="0 0 800 300"
                 style={{
                   width: '100%',
                   height: 'auto',
-                  transform: printPos.nameTransform,
+                  transform: exportPos.nameTransform,
                   transformOrigin: 'center center',
                 }}
               >
                 <defs>
                   <path
-                    id="curve-print"
-                    d={printPos.nameCurve}
+                    id="curve-export"
+                    d={exportPos.nameCurve}
                     fill="transparent"
                   />
                 </defs>
                 <text
                   style={{
                     fill: customColor,
-                    fontSize: printPos.nameFontSize,
-                    fontWeight: printPos.nameFontWeight,
+                    fontSize: exportPos.nameFontSize,
+                    fontWeight: exportPos.nameFontWeight,
                     fontFamily: 'Impact, "Arial Narrow", sans-serif',
                     textTransform: 'uppercase',
                     letterSpacing: '0.11em',
                   }}
                 >
                   <textPath
-                    href="#curve-print"
+                    href="#curve-export"
                     startOffset="50%"
                     textAnchor="middle"
                   >
@@ -789,22 +512,15 @@ export default function MonsterKioskApp() {
               </svg>
             </div>
 
-            {/* BAZA – PRINT */}
+            {/* BAZA – EXPORT */}
             <div
               style={{
                 position: 'absolute',
-                top:
-                  printBaseTopPxAdjusted !== undefined
-                    ? `${printBaseTopPxAdjusted}px`
-                    : undefined,
-                bottom:
-                  printBaseBottomPxAdjusted !== undefined
-                    ? `${printBaseBottomPxAdjusted}px`
-                    : undefined,
-                left: printPos.baseLeft || '0',
-                right: '0',
-                textAlign: printPos.baseAlign,
-                width: printPos.baseWidth || 'auto',
+                top: `${exportPos.baseTopPx}px`,
+                left: '50%',
+                transform: `translateX(-50%) translateX(${exportPos.baseOffsetPx || 0}px)`,
+                width: exportPos.baseWidth || '85%',
+                textAlign: exportPos.baseAlign || 'center',
                 margin: '0 auto',
                 padding: '0 8px',
               }}
@@ -817,7 +533,7 @@ export default function MonsterKioskApp() {
                   textShadow: '0 0 3px black',
                   wordBreak: 'break-word',
                   margin: 0,
-                  fontSize: '14px',
+                  fontSize: '16px',
                 }}
               >
                 Baza: {getBaseMonstersList()}
