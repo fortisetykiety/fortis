@@ -2,10 +2,9 @@
   "name": "kiosk-gotowy",
   "version": "0.1.0",
   "private": true,
- "scripts": {
+"scripts": {
   "dev": "next dev",
   "build": "next build",
-  "export": "next export",
   "start": "next start",
   "lint": "eslint"
 },
